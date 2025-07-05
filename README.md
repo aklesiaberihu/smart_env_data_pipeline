@@ -37,15 +37,13 @@ smart_env_data_pipeline/
 ## How to Run the Project
 
 1. Start all containers:
-```bash
+
 docker compose up -d
 
 2. Run the simulator:
-```bash
+
 python sensor_simulator/simulate_data.py
 
 3. Run the subscriber:
-```bash
+
 python data_router/mqtt_listener.py
-
-
