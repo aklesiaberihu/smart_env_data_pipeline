@@ -13,8 +13,6 @@ A real-time IoT data collection and storage system using MQTT, Python, and multi
 
  
 ## Folder Structure
-## 📁 Folder Structure
-
 ```
 smart_env_data_pipeline/
 ├── config/
