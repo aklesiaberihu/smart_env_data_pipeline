@@ -5,15 +5,12 @@ from py2neo import Graph, Node, Relationship
 from datetime import datetime
 from db_sqlite import insert_temperature, insert_humidity
 
-# MongoDB Setup
 mongo_client = MongoClient("mongodb://localhost:27017/")
 mongo_db = mongo_client["iot_data"]
 airquality_collection = mongo_db["airquality"]
 
-# Neo4j Setup
 graph = Graph("bolt://localhost:7687", auth=("neo4j", "password"))
 
-# MQTT Setup
 BROKER = "localhost"
 PORT = 1883
 TOPICS = ["env/temperature", "env/humidity", "env/airquality", "env/network"]
