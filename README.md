@@ -1,4 +1,4 @@
-#Smart Environmental IoT Data Pipeline
+Smart Environmental IoT Data Pipeline
 
 This project simulates a real-time IoT data pipeline that collects environmental sensor readings and routes them to different databases using **MQTT**, **Python**, and **Docker Compose**. Each component is modular, containerized, and works together to emulate a smart data architecture with multiple database types: **SQLite**, **MongoDB**, and **Neo4j**.
 
@@ -125,15 +125,16 @@ smart_env_data_pipeline/
 | env/network       | Neo4j          |
 
 ## Important Commands 
+''' bash
 
-1. Start all services
+1. Start all services -
 docker compose up -d
 
-2. Run the listener
+2. Run the listener -
 python data_router/mqtt_listener.py
 
-3. Run the simulator
+3. Run the simulator -
 python sensor_simulator/simulate_data.py
 
-4. Stop containers
+4. Stop containers - 
 docker compose down
