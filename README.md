@@ -71,12 +71,12 @@ All databases run in Docker containers with persistent volumes where needed.
 ## Integration & Data Flow
 
 **Sensor Simulator**  
-➡ Publishes sensor readings to MQTT broker  
+Publishes sensor readings to MQTT broker  
 **MQTT Broker (Mosquitto)**  
-➡ Routes messages to the Listener  
+Routes messages to the Listener  
 **Listener (Data Router)**  
-➡ Analyzes topic and content  
-➡ Stores in the appropriate database (SQLite / MongoDB / Neo4j)
+Analyzes topic and content  
+Stores in the appropriate database (SQLite / MongoDB / Neo4j)
 
 All services run inside Docker containers, communicating over a shared internal network.
 
@@ -86,7 +86,7 @@ All services run inside Docker containers, communicating over a shared internal 
 
 All services are containerized and managed using Docker Compose.
 
-### 🔧 Key Docker Compose Features:
+### Key Docker Compose Features:
 - One-command startup: `docker compose up -d`
 - Runs:
   - `Mosquitto` on port 1883
@@ -126,14 +126,14 @@ smart_env_data_pipeline/
 
 ## Important Commands 
 
-# Start all services
+1. Start all services
 docker compose up -d
 
-# Run the listener
+2. Run the listener
 python data_router/mqtt_listener.py
 
-# Run the simulator
+3. Run the simulator
 python sensor_simulator/simulate_data.py
 
-# Stop containers
+4. Stop containers
 docker compose down
