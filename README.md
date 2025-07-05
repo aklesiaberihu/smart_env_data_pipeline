@@ -72,15 +72,15 @@ smart_env_data_pipeline/
 
 ## Important commands 
 
-# 1. Start services
+### 1. Start services
 docker compose up -d
 
-# 2. Start MQTT Listener
+### 2. Start MQTT Listener
 python data_router/mqtt_listener.py
 
-# 3. Start Sensor Simulator
+### 3. Start Sensor Simulator
 python sensor_simulator/simulate_data.py
 
-# 4. Stop everything
+### 4. Stop everything
 docker compose down
 
