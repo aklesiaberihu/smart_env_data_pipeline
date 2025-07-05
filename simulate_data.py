@@ -4,7 +4,6 @@ import random
 import paho.mqtt.client as mqtt
 from datetime import datetime
 
-# MQTT broker details
 BROKER = "localhost"
 PORT = 1883
 TOPICS = ["env/temperature", "env/humidity", "env/airquality", "env/network"]
