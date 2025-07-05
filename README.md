@@ -12,8 +12,11 @@ A real-time IoT data collection and storage system using MQTT, Python, and multi
 - **Docker Compose**: Orchestrates services
 
 ## Folder Structure
-pre> ## 📁 Project Structure ``` smart_env_data_pipeline/ ├── config/ │ └── mosquitto.conf # MQTT broker configuration ├── data_router/ │ ├── mqtt_listener.py # Subscribes to MQTT topics and routes data to databases │ └── db_sqlite.py # SQLite handler for temperature and humidity ├── sensor_simulator/ │ └── simulate_data.py # Simulates and publishes sensor data via MQTT ├── docker-compose.yml # Docker setup for MQTT, MongoDB, Neo4j ├── environment_data.db # SQLite database (auto-generated) ├── requirements.txt # Python dependencies ├── README.md # Project documentation 
-``` </pre>
+pre> ## 📁 Project Structure 
+```
+smart_env_data_pipeline/ ├── config/ │ └── mosquitto.conf # MQTT broker configuration ├── data_router/ │ ├── mqtt_listener.py # Subscribes to MQTT topics and routes data to databases │ └── db_sqlite.py # SQLite handler for temperature and humidity ├── sensor_simulator/ │ └── simulate_data.py # Simulates and publishes sensor data via MQTT ├── docker-compose.yml # Docker setup for MQTT, MongoDB, Neo4j ├── environment_data.db # SQLite database (auto-generated) ├── requirements.txt # Python dependencies ├── README.md # Project documentation 
+```
+</pre>
 
 ## MQTT Topics and Database Routing
 
