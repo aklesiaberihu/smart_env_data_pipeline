@@ -1,86 +1,73 @@
 # Smart Environmental IoT Data Pipeline
 
-A containerized pipeline that simulates real-time environmental sensor readings and routes them to appropriate databases using **Python**, **MQTT**, and **Docker Compose**. The system demonstrates how different types of IoT data can be stored in specialized databases:
-- **SQLite** for structured data
-- **MongoDB** for semi-structured documents
-- **Neo4j** for graph-based device relationships
+A containerized real-time IoT data pipeline that simulates environmental sensor streams and routes them across three specialized databases using **Python**, **MQTT (Eclipse Mosquitto)**, and **Docker Compose**. This project demonstrates **polyglot persistence**—matching each data type to the database architecture best suited for it.
 
----
+## Architecture
 
-## System Overview
+```text
+[ Sensor Simulator (simulate_data.py) ]
+                  │  Publishes every 2s via paho-mqtt
+                  ▼
+[ Mosquitto MQTT Broker (Port 1883) ]
+                  │  Subscribes to env/*
+                  ▼
+[ MQTT Listener / Router (mqtt_listener.py) ]
+     ├──► env/temperature & env/humidity ──► SQLite (Relational)
+     ├──► env/airquality                 ──► MongoDB (Document Store)
+     └──► env/network                    ──► Neo4j (Graph Database)
+```
 
-- **Sensor Simulator**: Generates temperature, humidity, air quality (AQI), and device network data.
-- **MQTT Broker**: Receives data via topics (`env/temperature`, `env/humidity`, etc.).
-- **MQTT Listener**: Subscribes to topics and routes data to the correct database.
-- **Databases**: Each one stores a specific type of data for optimal structure and retrieval.
+## Polyglot Storage Strategy
 
----
+| Database | Type | Data Stored | Why This Database? |
+| :--- | :--- | :--- | :--- |
+| **SQLite** | Relational | Temperature & Humidity | Lightweight, structured time-stamped numerical records |
+| **MongoDB** | Document | Air Quality (AQI JSON) | Flexible schema for nested, semi-structured sensor payloads |
+| **Neo4j** | Graph | Device Connectivity | Native storage and querying for device-to-device relationships |
 
 ## Components
+- **`simulate_data.py`**: Generates synthetic readings for 4 sensor types (`env/temperature`, `env/humidity`, `env/airquality`, `env/network`) and publishes them every 2 seconds using `paho-mqtt`.
+- **`mqtt_listener.py`**: Subscribes to `env/*` topics, parses incoming payloads, and routes each message to its designated database.
+- **`db_sqlite.py`**: Handles SQLite schema initialization and writes for structured temperature and humidity readings.
+- **`mosquitto.conf` & `docker-compose.yml`**: Containerizes and configures the Mosquitto MQTT broker (port `1883`), MongoDB, and Neo4j services.
 
-### Sensor Simulator (`simulate_data.py`)
-- Simulates 4 types of sensors
-- Publishes to:
-  - `env/temperature`
-  - `env/humidity`
-  - `env/airquality`
-  - `env/network`
-- Publishes every 2 seconds using `paho-mqtt`
+## Repository Structure
 
----
-
-### MQTT Listener (`mqtt_listener.py`)
-- Subscribes to all `env/*` topics
-- Routes data:
-  - ➤ **SQLite**: temperature & humidity
-  - ➤ **MongoDB**: air quality
-  - ➤ **Neo4j**: device connectivity graph
-
----
-
-### MQTT Broker (Mosquitto)
-- Lightweight MQTT broker (Dockerized)
-- Listens on port `1883`
-- Configured via `mosquitto.conf`
-
----
-
- 
-## Folder Structure
-```
+```text
 smart_env_data_pipeline/
-├── config/
-│   └── mosquitto.conf           # MQTT broker configuration
-├── data_router/
-│   ├── mqtt_listener.py         # Subscribes to MQTT topics and routes data to databases
-│   └── db_sqlite.py             # SQLite handler for temperature and humidity
-├── sensor_simulator/
-│   └── simulate_data.py         # Simulates and publishes sensor data via MQTT
-├── docker-compose.yml           # Docker setup for MQTT, MongoDB, Neo4j
-├── environment_data.db          # SQLite database (auto-generated)
-├── requirements.txt             # Python dependencies
-├── README.md                    # Project documentation
+├── docker-compose.yml       # Docker setup for Mosquitto, MongoDB, and Neo4j
+├── mosquitto.conf           # MQTT broker configuration
+├── simulate_data.py         # IoT sensor simulator (MQTT publisher)
+├── mqtt_listener.py         # MQTT subscriber and multi-DB data router
+├── db_sqlite.py             # SQLite database handler
+├── requirements.txt         # Python dependencies
+├── environment_data.db      # Sample/auto-generated SQLite database
+└── README.md                # Project documentation
 ```
 
-### Databases Used
+## How to Run Locally
 
-| Database   | Data Stored                   |
-|------------|-------------------------------|
-| SQLite     | Temperature, Humidity         |
-| MongoDB    | Air Quality (AQI JSON docs)   |
-| Neo4j      | Device-to-device relationships|
+1. **Install Python dependencies:**
+   ```bash
+   pip install -r requirements.txt
+   ```
 
-## Important commands 
+2. **Start the Dockerized services (Mosquitto, MongoDB, Neo4j):**
+   ```bash
+   docker compose up -d
+   ```
 
-### 1. Start services
-docker compose up -d
+3. **Start the MQTT Listener (Terminal 1):**
+   ```bash
+   python mqtt_listener.py
+   ```
 
-### 2. Start MQTT Listener
-python data_router/mqtt_listener.py
+4. **Start the Sensor Simulator (Terminal 2):**
+   ```bash
+   python simulate_data.py
+   ```
 
-### 3. Start Sensor Simulator
-python sensor_simulator/simulate_data.py
-
-### 4. Stop everything
-docker compose down
-
+5. **Stop all services when finished:**
+   ```bash
+   docker compose down
+   ```
